@@ -1,0 +1,90 @@
+package edu.gorb.xmltask.builder;
+
+import edu.gorb.xmltask.entity.*;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+
+import java.time.LocalDateTime;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
+
+public class VoucherHandler extends DefaultHandler {
+    private Set<AbstractVoucher> vouchers;
+    private AbstractVoucher currentVoucher;
+    private VoucherTag currentXmlTag;
+    private EnumSet<VoucherTag> withText;
+
+    public VoucherHandler() {
+        vouchers = new HashSet<>();
+        withText = EnumSet.range(VoucherTag.COUNTRY, VoucherTag.TV);
+    }
+
+    public Set<AbstractVoucher> getVouchers() {
+        return new HashSet<>(vouchers);
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+        if (qName.equals(VoucherTag.BEACH_VACATION_VOUCHER.toString())
+                || qName.equals(VoucherTag.PILGRIMAGE_VOUCHER.toString())) {
+            currentVoucher = qName.equals(VoucherTag.PILGRIMAGE_VOUCHER.toString()) ?
+                    new PilgrimageVoucher() :
+                    new BeachVacationVoucher();
+            currentVoucher.setId(attributes.getValue(0));
+            currentVoucher.setWebSite(
+                    attributes.getLength() == 2 ?
+                            attributes.getValue(1) :
+                            AbstractVoucher.DEFAULT_WEBSITE
+            );
+        } else {
+            VoucherTag temp = VoucherTag.valueOf(qName.toUpperCase().replace("-", "_"));
+            if (withText.contains(temp)) {
+                currentXmlTag = temp;
+            }
+        }
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName) {
+        if (qName.equals(VoucherTag.BEACH_VACATION_VOUCHER.toString())
+                || qName.equals(VoucherTag.PILGRIMAGE_VOUCHER.toString())) {
+            vouchers.add(currentVoucher);
+            currentVoucher = null;
+        }
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        String data = new String(ch, start, length).strip();
+        if (currentXmlTag != null) {
+            switch (currentXmlTag) {
+                case COUNTRY -> currentVoucher.setCountry(Countries.valueOf(data.toUpperCase()));
+                case DEPARTURE_DATE_TIME -> currentVoucher.
+                        setDeparture(LocalDateTime.parse(data));
+                case ARRIVAL_DATE_TIME -> currentVoucher.
+                        setArrival(LocalDateTime.parse(data));
+                case TRANSPORT -> currentVoucher.setTransport(Transport.valueOf(data.toUpperCase()));
+                case COST -> currentVoucher.setCost(Integer.parseInt(data));
+                case PLACE_COUNT -> currentVoucher.getHotel().setPlaceCount(Integer.parseInt(data));
+                case STARS -> currentVoucher.getHotel().setStarsCount(Integer.parseInt(data));
+                case FOOD -> currentVoucher.getHotel().setFoodType(FoodType.valueOf(data.toUpperCase()));
+                case AIR_CONDITIONING -> currentVoucher.getHotel().
+                        setAirConditioningPresent(Boolean.parseBoolean(data));
+                case TV -> currentVoucher.getHotel().
+                        setTvPresent(Boolean.parseBoolean(data));
+                case DISTANCE_TO_BEACH -> {
+                    BeachVacationVoucher tempVoucher = (BeachVacationVoucher) currentVoucher;
+                    tempVoucher.setDistanceToBeach(Integer.parseInt(data));
+                }
+                case PILGRIMAGE_PASSPORT_REQUIRED -> {
+                    PilgrimageVoucher tempVoucher = (PilgrimageVoucher) currentVoucher;
+                    tempVoucher.setPilgrimagePassportRequired(Boolean.parseBoolean(data));
+                }
+                default -> throw new EnumConstantNotPresentException(
+                        currentXmlTag.getDeclaringClass(), currentXmlTag.name());
+            }
+        }
+        currentXmlTag = null;
+    }
+}
