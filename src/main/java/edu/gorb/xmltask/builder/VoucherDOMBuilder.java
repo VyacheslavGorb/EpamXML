@@ -89,7 +89,7 @@ public class VoucherDOMBuilder extends AbstractVoucherBuilder {
             ((BeachVacationVoucher) voucher).setDistanceToBeach(Integer.parseInt(data));
         }
 
-        AbstractVoucher.Hotel hotel = voucher.getHotel();
+        Hotel hotel = voucher.getHotel();
         Element hotelElement =
                 (Element) voucherElement.getElementsByTagName(VoucherTag.HOTEL.toString()).item(0);
 

@@ -13,7 +13,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 
-public class VoucherSAXBuilder extends AbstractVoucherBuilder {
+public class VoucherSaxBuilder extends AbstractVoucherBuilder {
     private static final Logger logger = LogManager.getLogger();
 
     @Override

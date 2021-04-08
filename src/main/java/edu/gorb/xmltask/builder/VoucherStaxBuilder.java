@@ -90,7 +90,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
         throw new XMLStreamException("Unknown element in tag <student>");
     }
 
-    private void fillXMLHotel(XMLStreamReader reader, AbstractVoucher.Hotel hotel)
+    private void fillXMLHotel(XMLStreamReader reader, Hotel hotel)
             throws XMLStreamException {
         int type;
         String name;
