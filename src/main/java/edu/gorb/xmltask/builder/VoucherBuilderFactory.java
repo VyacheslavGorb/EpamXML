@@ -6,7 +6,7 @@ public class VoucherBuilderFactory {
         switch (type) {
             case SAX -> builder = new VoucherSAXBuilder();
             case DOM -> builder = new VoucherDOMBuilder();
-            case STAX -> builder = new VoucherSAXBuilder();
+            case STAX -> builder = new VoucherStaxBuilder();
         }
         return builder;
     }

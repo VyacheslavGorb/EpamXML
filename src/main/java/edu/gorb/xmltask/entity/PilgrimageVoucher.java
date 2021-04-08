@@ -9,7 +9,7 @@ public class PilgrimageVoucher extends AbstractVoucher {
     public PilgrimageVoucher() {
     }
 
-    public PilgrimageVoucher(String id, String webSite, Countries country, LocalDateTime departure,
+    public PilgrimageVoucher(String id, String webSite, CountryType country, LocalDateTime departure,
                              LocalDateTime arrival, Hotel hotel, int cost, boolean pilgrimagePassportRequired) {
         super(id, webSite, country, departure, arrival, hotel, cost);
         this.pilgrimagePassportRequired = pilgrimagePassportRequired;
@@ -26,8 +26,8 @@ public class PilgrimageVoucher extends AbstractVoucher {
     @Override
     public String toString() {
         return "PilgrimageVoucher{" +
-                "isPilgrimagePassportRequired=" + pilgrimagePassportRequired +
-                '}';
+                "pilgrimagePassportRequired=" + pilgrimagePassportRequired +
+                "} " + super.toString();
     }
 
     @Override

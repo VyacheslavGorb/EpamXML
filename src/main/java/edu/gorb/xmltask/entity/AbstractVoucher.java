@@ -7,17 +7,17 @@ public abstract class AbstractVoucher {
     public static final String DEFAULT_WEBSITE = "https://www.tour.com";
     private String id;
     private String webSite;
-    private Countries country;
+    private CountryType country;
     private LocalDateTime departure;
     private LocalDateTime arrival;
     private Hotel hotel = new Hotel();
     private int cost;
-    private Transport transport;
+    private TransportType transportType;
 
-    protected AbstractVoucher() {
+    public AbstractVoucher() {
     }
 
-    protected AbstractVoucher(String id, String webSite, Countries country, LocalDateTime departure,
+    public AbstractVoucher(String id, String webSite, CountryType country, LocalDateTime departure,
                               LocalDateTime arrival, Hotel hotel, int cost) {
         this.id = id;
         this.webSite = webSite;
@@ -44,11 +44,11 @@ public abstract class AbstractVoucher {
         this.webSite = webSite;
     }
 
-    public Countries getCountry() {
+    public CountryType getCountry() {
         return country;
     }
 
-    public void setCountry(Countries country) {
+    public void setCountry(CountryType country) {
         this.country = country;
     }
 
@@ -84,12 +84,12 @@ public abstract class AbstractVoucher {
         this.cost = cost;
     }
 
-    public Transport getTransport() {
-        return transport;
+    public TransportType getTransport() {
+        return transportType;
     }
 
-    public void setTransport(Transport transport) {
-        this.transport = transport;
+    public void setTransport(TransportType transportType) {
+        this.transportType = transportType;
     }
 
     @Override
@@ -97,12 +97,12 @@ public abstract class AbstractVoucher {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractVoucher that = (AbstractVoucher) o;
-        return cost == that.cost && Objects.equals(id, that.id) && Objects.equals(webSite, that.webSite) && country == that.country && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival) && Objects.equals(hotel, that.hotel) && transport == that.transport;
+        return cost == that.cost && Objects.equals(id, that.id) && Objects.equals(webSite, that.webSite) && country == that.country && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival) && Objects.equals(hotel, that.hotel) && transportType == that.transportType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, webSite, country, departure, arrival, hotel, cost, transport);
+        return Objects.hash(id, webSite, country, departure, arrival, hotel, cost, transportType);
     }
 
     @Override
@@ -115,7 +115,83 @@ public abstract class AbstractVoucher {
                 ", arrival=" + arrival +
                 ", hotel=" + hotel.toString() +
                 ", cost=" + cost +
-                ", transport=" + transport +
+                ", transport=" + transportType +
                 '}';
+    }
+
+    public class Hotel {
+        private int starsCount;
+        private FoodType foodType;
+        private int placeCount;
+        private boolean isAirConditioningPresent;
+        private boolean isTvPresent;
+
+        public int getStarsCount() {
+            return starsCount;
+        }
+
+        public void setStarsCount(int starsCount) {
+            this.starsCount = starsCount;
+        }
+
+        public FoodType getFoodType() {
+            return foodType;
+        }
+
+        public void setFoodType(FoodType foodType) {
+            this.foodType = foodType;
+        }
+
+        public int getPlaceCount() {
+            return placeCount;
+        }
+
+        public void setPlaceCount(int placeCount) {
+            this.placeCount = placeCount;
+        }
+
+        public boolean isAirConditioningPresent() {
+            return isAirConditioningPresent;
+        }
+
+        public void setAirConditioningPresent(boolean airConditioningPresent) {
+            isAirConditioningPresent = airConditioningPresent;
+        }
+
+        public boolean isTvPresent() {
+            return isTvPresent;
+        }
+
+        public void setTvPresent(boolean tvPresent) {
+            isTvPresent = tvPresent;
+        }
+
+        @Override
+        public String toString() {
+            return "Hotel{" +
+                    "starsCount=" + starsCount +
+                    ", foodType=" + foodType +
+                    ", placeCount=" + placeCount +
+                    ", isAirConditioningPresent=" + isAirConditioningPresent +
+                    ", isTvPresent=" + isTvPresent +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Hotel)) return false;
+            Hotel hotel = (Hotel) o;
+            return starsCount == hotel.starsCount
+                    && placeCount == hotel.placeCount
+                    && isAirConditioningPresent == hotel.isAirConditioningPresent
+                    && isTvPresent == hotel.isTvPresent
+                    && foodType == hotel.foodType;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(starsCount, foodType, placeCount, isAirConditioningPresent, isTvPresent);
+        }
     }
 }

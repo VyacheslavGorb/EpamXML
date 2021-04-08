@@ -1,6 +1,6 @@
 package edu.gorb.xmltask.entity;
 
-public enum Countries {
+public enum CountryType {
     USA,
     UAE,
     RUSSIA,

@@ -10,10 +10,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class VoucherHandler extends DefaultHandler {
-    private Set<AbstractVoucher> vouchers;
+    private final Set<AbstractVoucher> vouchers;
     private AbstractVoucher currentVoucher;
     private VoucherTag currentXmlTag;
-    private EnumSet<VoucherTag> withText;
+    private final EnumSet<VoucherTag> withText;
 
     public VoucherHandler() {
         vouchers = new HashSet<>();
@@ -21,7 +21,7 @@ public class VoucherHandler extends DefaultHandler {
     }
 
     public Set<AbstractVoucher> getVouchers() {
-        return new HashSet<>(vouchers);
+        return vouchers;
     }
 
     @Override
@@ -31,12 +31,15 @@ public class VoucherHandler extends DefaultHandler {
             currentVoucher = qName.equals(VoucherTag.PILGRIMAGE_VOUCHER.toString()) ?
                     new PilgrimageVoucher() :
                     new BeachVacationVoucher();
-            currentVoucher.setId(attributes.getValue(0));
-            currentVoucher.setWebSite(
-                    attributes.getLength() == 2 ?
-                            attributes.getValue(1) :
-                            AbstractVoucher.DEFAULT_WEBSITE
-            );
+            if (attributes.getLength() == 1) {
+                currentVoucher.setId(attributes.getValue(0));
+                currentVoucher.setWebSite(AbstractVoucher.DEFAULT_WEBSITE);
+            } else {
+                int idAttributeIndex = attributes.getLocalName(0).equals(VoucherTag.ID.toString()) ? 0 : 1;
+                int websiteAttributeIndex = attributes.getLocalName(0).equals(VoucherTag.ID.toString()) ? 1 : 0;
+                currentVoucher.setId(attributes.getValue(idAttributeIndex));
+                currentVoucher.setWebSite(attributes.getValue(websiteAttributeIndex));
+            }
         } else {
             VoucherTag temp = VoucherTag.valueOf(qName.toUpperCase().replace("-", "_"));
             if (withText.contains(temp)) {
@@ -59,12 +62,12 @@ public class VoucherHandler extends DefaultHandler {
         String data = new String(ch, start, length).strip();
         if (currentXmlTag != null) {
             switch (currentXmlTag) {
-                case COUNTRY -> currentVoucher.setCountry(Countries.valueOf(data.toUpperCase()));
+                case COUNTRY -> currentVoucher.setCountry(CountryType.valueOf(data.toUpperCase()));
                 case DEPARTURE_DATE_TIME -> currentVoucher.
                         setDeparture(LocalDateTime.parse(data));
                 case ARRIVAL_DATE_TIME -> currentVoucher.
                         setArrival(LocalDateTime.parse(data));
-                case TRANSPORT -> currentVoucher.setTransport(Transport.valueOf(data.toUpperCase()));
+                case TRANSPORT_TYPE -> currentVoucher.setTransport(TransportType.valueOf(data.toUpperCase()));
                 case COST -> currentVoucher.setCost(Integer.parseInt(data));
                 case PLACE_COUNT -> currentVoucher.getHotel().setPlaceCount(Integer.parseInt(data));
                 case STARS -> currentVoucher.getHotel().setStarsCount(Integer.parseInt(data));

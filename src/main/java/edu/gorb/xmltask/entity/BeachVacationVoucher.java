@@ -9,7 +9,7 @@ public class BeachVacationVoucher extends AbstractVoucher {
     public BeachVacationVoucher() {
     }
 
-    public BeachVacationVoucher(String id, String webSite, Countries country, LocalDateTime departure,
+    public BeachVacationVoucher(String id, String webSite, CountryType country, LocalDateTime departure,
                                 LocalDateTime arrival, Hotel hotel, int cost, int distanceToBeach) {
         super(id, webSite, country, departure, arrival, hotel, cost);
         this.distanceToBeach = distanceToBeach;

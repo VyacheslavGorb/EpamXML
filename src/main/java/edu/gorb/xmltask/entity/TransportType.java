@@ -1,6 +1,6 @@
 package edu.gorb.xmltask.entity;
 
-public enum Transport {
+public enum TransportType {
     AUTO,
     PLANE,
     TRAIN,

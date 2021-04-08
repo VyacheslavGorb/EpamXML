@@ -71,13 +71,13 @@ public class VoucherDOMBuilder extends AbstractVoucherBuilder {
 
         voucher.setId(voucherElement.getAttribute("id"));
         String data = getElementTextContent(voucherElement, VoucherTag.COUNTRY.toString());
-        voucher.setCountry(Countries.valueOf(data.toUpperCase()));
+        voucher.setCountry(CountryType.valueOf(data.toUpperCase()));
         data = getElementTextContent(voucherElement, VoucherTag.DEPARTURE_DATE_TIME.toString());
         voucher.setDeparture(LocalDateTime.parse(data));
         data = getElementTextContent(voucherElement, VoucherTag.ARRIVAL_DATE_TIME.toString());
         voucher.setArrival(LocalDateTime.parse(data));
-        data = getElementTextContent(voucherElement, VoucherTag.TRANSPORT.toString());
-        voucher.setTransport(Transport.valueOf(data.toUpperCase()));
+        data = getElementTextContent(voucherElement, VoucherTag.TRANSPORT_TYPE.toString());
+        voucher.setTransport(TransportType.valueOf(data.toUpperCase()));
         data = getElementTextContent(voucherElement, VoucherTag.COST.toString());
         voucher.setCost(Integer.parseInt(data));
 
@@ -89,7 +89,7 @@ public class VoucherDOMBuilder extends AbstractVoucherBuilder {
             ((BeachVacationVoucher) voucher).setDistanceToBeach(Integer.parseInt(data));
         }
 
-        Hotel hotel = voucher.getHotel();
+        AbstractVoucher.Hotel hotel = voucher.getHotel();
         Element hotelElement =
                 (Element) voucherElement.getElementsByTagName(VoucherTag.HOTEL.toString()).item(0);
 

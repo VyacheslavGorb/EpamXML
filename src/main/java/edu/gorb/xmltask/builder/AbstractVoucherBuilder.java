@@ -7,14 +7,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class AbstractVoucherBuilder {
-    Set<AbstractVoucher> vouchers;
+    protected Set<AbstractVoucher> vouchers;
 
     protected AbstractVoucherBuilder() {
         vouchers = new HashSet<>();
     }
 
     public Set<AbstractVoucher> getVouchers() {
-        return new HashSet<>(vouchers);
+        return vouchers;
     }
 
     public abstract void buildVouchers(String filePath) throws VoucherException;

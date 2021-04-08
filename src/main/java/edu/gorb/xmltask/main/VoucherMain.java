@@ -18,10 +18,12 @@ public class VoucherMain {
         VoucherBuilderFactory factory = new VoucherBuilderFactory();
         AbstractVoucherBuilder saxBuilder = factory.createBuilder(BuilderType.SAX);
         AbstractVoucherBuilder domBuilder = factory.createBuilder(BuilderType.DOM);
+        AbstractVoucherBuilder staxBuilder = factory.createBuilder(BuilderType.STAX);
         try {
             String path = convertToAbsolutePath(RELATIVE_PATH);
-            domBuilder.buildVouchers(path);
             saxBuilder.buildVouchers(path);
+            domBuilder.buildVouchers(path);
+            staxBuilder.buildVouchers(path);
             logger.log(Level.INFO, "Built successfully");
         } catch (VoucherException e) {
             logger.log(Level.FATAL, e.getMessage());
