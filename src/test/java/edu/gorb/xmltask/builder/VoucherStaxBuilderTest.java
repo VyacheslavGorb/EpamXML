@@ -13,12 +13,13 @@ import java.util.Set;
 
 import static org.testng.AssertJUnit.assertEquals;
 
-public class VoucherSaxBuilderTest {
+public class VoucherStaxBuilderTest {
+
     private AbstractVoucherBuilder builder;
 
     @BeforeClass
     public void createBuilder() {
-        builder = new VoucherSaxBuilder();
+        builder = new VoucherStaxBuilder();
     }
 
     @Test(dataProvider = "validData")

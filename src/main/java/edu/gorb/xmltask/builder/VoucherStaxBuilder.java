@@ -2,6 +2,9 @@ package edu.gorb.xmltask.builder;
 
 import edu.gorb.xmltask.entity.*;
 import edu.gorb.xmltask.exception.VoucherException;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +17,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 public class VoucherStaxBuilder extends AbstractVoucherBuilder {
+    private static final Logger logger = LogManager.getLogger();
     private final XMLInputFactory inputFactory;
 
     public VoucherStaxBuilder() {
@@ -22,7 +26,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
 
 
     @Override
-    public void buildVouchers(String filePath) {
+    public void buildVouchers(String filePath) throws VoucherException {
         XMLStreamReader reader;
         String name;
         try (FileInputStream inputStream = new FileInputStream(new File(filePath))) {
@@ -39,9 +43,14 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
                     }
                 }
             }
-        } catch (XMLStreamException | IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            logger.log(Level.ERROR, "Error occurred while reading file {}; message:  {}", filePath, e.getMessage());
+            throw new VoucherException("Error occurred while reading file " + filePath + "; message:  " + e.getMessage());
+        }catch (XMLStreamException e){
+            logger.log(Level.ERROR, "Error occurred while parsing file {}; message:  {}", filePath, e.getMessage());
+            throw new VoucherException("Error occurred while parsing file " + filePath + "; message:  " + e.getMessage());
         }
+        logger.log(Level.INFO, "Vouchers were successfully built. File: {}", filePath);
     }
 
     private AbstractVoucher buildVoucher(XMLStreamReader reader) throws XMLStreamException {
@@ -69,14 +78,16 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
                         case TRANSPORT_TYPE -> voucher.setTransport(TransportType.valueOf(data.toUpperCase()));
                         case COST -> voucher.setCost(Integer.parseInt(data));
                         case DISTANCE_TO_BEACH -> {
+                            assert voucher instanceof BeachVacationVoucher;
                             BeachVacationVoucher tempVoucher = (BeachVacationVoucher) voucher;
                             tempVoucher.setDistanceToBeach(Integer.parseInt(data));
                         }
                         case PILGRIMAGE_PASSPORT_REQUIRED -> {
+                            assert voucher instanceof PilgrimageVoucher;
                             PilgrimageVoucher tempVoucher = (PilgrimageVoucher) voucher;
                             tempVoucher.setPilgrimagePassportRequired(Boolean.parseBoolean(data));
                         }
-                        case HOTEL -> fillXMLHotel(reader, voucher.getHotel());
+                        case HOTEL -> createXMLHotel(reader, voucher.getHotel());
                     }
                     break;
                 case XMLStreamConstants.END_ELEMENT:
@@ -90,7 +101,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
         throw new XMLStreamException("Unknown element in tag <student>");
     }
 
-    private void fillXMLHotel(XMLStreamReader reader, Hotel hotel)
+    private void createXMLHotel(XMLStreamReader reader, Hotel hotel)
             throws XMLStreamException {
         int type;
         String name;

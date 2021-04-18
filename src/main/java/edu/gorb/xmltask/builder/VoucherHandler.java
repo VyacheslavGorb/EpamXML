@@ -36,7 +36,7 @@ public class VoucherHandler extends DefaultHandler {
                 currentVoucher.setWebSite(AbstractVoucher.DEFAULT_WEBSITE);
             } else {
                 int idAttributeIndex = attributes.getLocalName(0).equals(VoucherTag.ID.toString()) ? 0 : 1;
-                int websiteAttributeIndex = attributes.getLocalName(0).equals(VoucherTag.ID.toString()) ? 1 : 0;
+                int websiteAttributeIndex = 1 - idAttributeIndex;
                 currentVoucher.setId(attributes.getValue(idAttributeIndex));
                 currentVoucher.setWebSite(attributes.getValue(websiteAttributeIndex));
             }

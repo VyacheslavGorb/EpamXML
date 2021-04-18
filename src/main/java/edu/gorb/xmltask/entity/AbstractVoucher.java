@@ -1,7 +1,6 @@
 package edu.gorb.xmltask.entity;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public abstract class AbstractVoucher {
     public static final String DEFAULT_WEBSITE = "https://www.tour.com";
@@ -17,8 +16,9 @@ public abstract class AbstractVoucher {
     public AbstractVoucher() {
     }
 
-    public AbstractVoucher(String id, String webSite, CountryType country, LocalDateTime departure,
-                              LocalDateTime arrival, Hotel hotel, int cost) {
+    public AbstractVoucher(String id, String webSite, CountryType country,
+                           LocalDateTime departure, LocalDateTime arrival,
+                           Hotel hotel, int cost, TransportType transportType) {
         this.id = id;
         this.webSite = webSite;
         this.country = country;
@@ -26,6 +26,7 @@ public abstract class AbstractVoucher {
         this.arrival = arrival;
         this.hotel = hotel;
         this.cost = cost;
+        this.transportType = transportType;
     }
 
     public String getId() {
@@ -93,28 +94,44 @@ public abstract class AbstractVoucher {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AbstractVoucher{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", webSite='").append(webSite).append('\'');
+        sb.append(", country=").append(country);
+        sb.append(", departure=").append(departure);
+        sb.append(", arrival=").append(arrival);
+        sb.append(", hotel=").append(hotel);
+        sb.append(", cost=").append(cost);
+        sb.append(", transportType=").append(transportType);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractVoucher that = (AbstractVoucher) o;
-        return cost == that.cost && Objects.equals(id, that.id) && Objects.equals(webSite, that.webSite) && country == that.country && Objects.equals(departure, that.departure) && Objects.equals(arrival, that.arrival) && Objects.equals(hotel, that.hotel) && transportType == that.transportType;
+        AbstractVoucher voucher = (AbstractVoucher) o;
+        return cost == voucher.cost &&
+                webSite.equals(voucher.webSite)
+                && country == voucher.country
+                && departure.equals(voucher.departure)
+                && arrival.equals(voucher.arrival)
+                && hotel.equals(voucher.hotel)
+                && transportType == voucher.transportType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, webSite, country, departure, arrival, hotel, cost, transportType);
-    }
-
-    @Override
-    public String toString() {
-        return "AbstractVoucher{" +
-                "id='" + id + '\'' +
-                ", webSite='" + webSite + '\'' +
-                ", country=" + country +
-                ", departure=" + departure +
-                ", arrival=" + arrival +
-                ", cost=" + cost +
-                ", transport=" + transportType +
-                '}';
+        int result = 1;
+        result += 31 * result + webSite.hashCode();
+        result += 31 * result + country.hashCode();
+        result += 31 * result + departure.hashCode();
+        result += 31 * result + arrival.hashCode();
+        result += 31 * result + hotel.hashCode();
+        result += 31 * result + cost;
+        result += 31 * result + transportType.hashCode();
+        return result;
     }
 }

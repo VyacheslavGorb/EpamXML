@@ -15,22 +15,22 @@ public class VoucherErrorHandler implements ErrorHandler {
 
     @Override
     public void warning(SAXParseException exception) throws SAXException {
-        logger.log(Level.WARN, ERROR_TEMPLATE, getPosition(exception), exception.getMessage());
+        logger.log(Level.WARN, ERROR_TEMPLATE, getLineColumnNumber(exception), exception.getMessage());
     }
 
     @Override
     public void error(SAXParseException exception) throws SAXException {
-        logger.log(Level.ERROR, ERROR_TEMPLATE, getPosition(exception), exception.getMessage());
+        logger.log(Level.ERROR, ERROR_TEMPLATE, getLineColumnNumber(exception), exception.getMessage());
         throw exception;
     }
 
     @Override
     public void fatalError(SAXParseException exception) throws SAXException {
-        logger.log(Level.FATAL, ERROR_TEMPLATE, getPosition(exception), exception.getMessage());
+        logger.log(Level.FATAL, ERROR_TEMPLATE, getLineColumnNumber(exception), exception.getMessage());
         throw exception;
     }
 
-    private String getPosition(SAXParseException exception) {
+    private String getLineColumnNumber(SAXParseException exception) {
         return exception.getLineNumber() + " : " + exception.getColumnNumber();
     }
 }

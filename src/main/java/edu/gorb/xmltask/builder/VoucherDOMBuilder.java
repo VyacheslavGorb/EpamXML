@@ -3,11 +3,9 @@ package edu.gorb.xmltask.builder;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Locale;
-import java.util.Objects;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 
 import edu.gorb.xmltask.entity.*;
 import edu.gorb.xmltask.exception.VoucherException;
@@ -67,7 +65,13 @@ public class VoucherDOMBuilder extends AbstractVoucherBuilder {
                 new BeachVacationVoucher();
 
         String websiteAttribute = voucherElement.getAttribute("web-site");
-        voucher.setWebSite(Objects.requireNonNullElse(websiteAttribute, AbstractVoucher.DEFAULT_WEBSITE));
+
+        if(websiteAttribute.isBlank()){
+            voucher.setWebSite(AbstractVoucher.DEFAULT_WEBSITE);
+        }else {
+            voucher.setWebSite(websiteAttribute);
+        }
+
 
         voucher.setId(voucherElement.getAttribute("id"));
         String data = getElementTextContent(voucherElement, VoucherTag.COUNTRY.toString());
