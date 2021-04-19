@@ -72,7 +72,6 @@ public class VoucherDOMBuilder extends AbstractVoucherBuilder {
             voucher.setWebSite(websiteAttribute);
         }
 
-
         voucher.setId(voucherElement.getAttribute("id"));
         String data = getElementTextContent(voucherElement, VoucherTag.COUNTRY.toString());
         voucher.setCountry(CountryType.valueOf(data.toUpperCase()));

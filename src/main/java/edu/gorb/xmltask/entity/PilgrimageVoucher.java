@@ -1,7 +1,6 @@
 package edu.gorb.xmltask.entity;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class PilgrimageVoucher extends AbstractVoucher {
     private boolean pilgrimagePassportRequired;
@@ -9,7 +8,9 @@ public class PilgrimageVoucher extends AbstractVoucher {
     public PilgrimageVoucher() {
     }
 
-    public PilgrimageVoucher(String id, String webSite, CountryType country, LocalDateTime departure, LocalDateTime arrival, Hotel hotel, int cost, TransportType transportType, boolean pilgrimagePassportRequired) {
+    public PilgrimageVoucher(String id, String webSite, CountryType country, LocalDateTime departure,
+                             LocalDateTime arrival, Hotel hotel, int cost, TransportType transportType,
+                             boolean pilgrimagePassportRequired) {
         super(id, webSite, country, departure, arrival, hotel, cost, transportType);
         this.pilgrimagePassportRequired = pilgrimagePassportRequired;
     }
@@ -43,8 +44,8 @@ public class PilgrimageVoucher extends AbstractVoucher {
     @Override
     public int hashCode() {
         int result = 1;
-        result += 31* result + super.hashCode();
-        result += 31* result + Boolean.hashCode(pilgrimagePassportRequired);
+        result += 31 * result + super.hashCode();
+        result += 31 * result + Boolean.hashCode(pilgrimagePassportRequired);
         return result;
     }
 }

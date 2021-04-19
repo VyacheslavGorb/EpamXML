@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -46,7 +45,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
         } catch (IOException e) {
             logger.log(Level.ERROR, "Error occurred while reading file {}; message:  {}", filePath, e.getMessage());
             throw new VoucherException("Error occurred while reading file " + filePath + "; message:  " + e.getMessage());
-        }catch (XMLStreamException e){
+        } catch (XMLStreamException e) {
             logger.log(Level.ERROR, "Error occurred while parsing file {}; message:  {}", filePath, e.getMessage());
             throw new VoucherException("Error occurred while parsing file " + filePath + "; message:  " + e.getMessage());
         }
@@ -58,11 +57,12 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
                 new PilgrimageVoucher() :
                 new BeachVacationVoucher();
         voucher.setId(reader.getAttributeValue(null, VoucherTag.ID.toString()));
-        voucher.setWebSite(
-                Objects.requireNonNullElse(reader.getAttributeValue(
-                        null, VoucherTag.WEB_SITE.toString()),
-                        AbstractVoucher.DEFAULT_WEBSITE)
-        );
+
+        String webSiteAttr = reader.getAttributeValue(null, VoucherTag.WEB_SITE.toString());
+        if (webSiteAttr == null) {
+            webSiteAttr = AbstractVoucher.DEFAULT_WEBSITE;
+        }
+        voucher.setWebSite(webSiteAttr);
 
         String name;
         while (reader.hasNext()) {

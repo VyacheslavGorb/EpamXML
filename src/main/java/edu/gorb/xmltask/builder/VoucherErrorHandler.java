@@ -9,7 +9,6 @@ import org.xml.sax.SAXParseException;
 
 
 public class VoucherErrorHandler implements ErrorHandler {
-
     private static final Logger logger = LogManager.getLogger();
     private static final String ERROR_TEMPLATE = "position: {}\nmessage: {}";
 

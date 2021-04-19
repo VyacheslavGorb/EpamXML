@@ -20,6 +20,7 @@ public class VoucherValidator {
         String language = XMLConstants.W3C_XML_SCHEMA_NS_URI;
         SchemaFactory factory = SchemaFactory.newInstance(language);
         File schemaLocation = new File(schemaPath);
+        boolean result = true;
         try {
             Schema schema = factory.newSchema(schemaLocation);
             Validator validator = schema.newValidator();
@@ -28,11 +29,11 @@ public class VoucherValidator {
             logger.log(Level.INFO,"File: {} is valid", filePath);
         } catch (SAXException e) {
             logger.log(Level.INFO,"File: {} is not valid; message: {}", filePath, e.getMessage());
-            return false;
+            result = false;
         } catch (IOException e) {
             logger.log(Level.INFO, "Error while reading file: {}", filePath);
-            return false;
+            result = false;
         }
-        return true;
+        return result;
     }
 }

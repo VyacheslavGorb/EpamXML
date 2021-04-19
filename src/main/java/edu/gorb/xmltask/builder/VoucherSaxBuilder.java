@@ -27,14 +27,13 @@ public class VoucherSaxBuilder extends AbstractVoucherBuilder {
             reader.setErrorHandler(new VoucherErrorHandler());
             reader.parse(filePath);
             vouchers = handler.getVouchers();
+        } catch (EnumConstantNotPresentException | SAXException e){
+            logger.log(Level.ERROR, "Error occurred while parsing file {}; message:  {}", filePath, e.getMessage());
+            throw new VoucherException("Error occurred while parsing file " + filePath + "; message:  " + e.getMessage());
         } catch (IOException e) {
             logger.log(Level.ERROR, "Error occurred while reading file {}; message:  {}", filePath, e.getMessage());
             throw new VoucherException("Error occurred while reading file " + filePath + "; message:  " + e.getMessage());
-        }catch (SAXException e){
-            logger.log(Level.ERROR, "Error occurred while parsing file {}; message:  {}", filePath, e.getMessage());
-            throw new VoucherException("Error occurred while parsing file " + filePath + "; message:  " + e.getMessage());
-        }
-        catch (ParserConfigurationException e){
+        } catch (ParserConfigurationException e){
             logger.log(Level.ERROR, "Error occurred while configuring; message:  {}", e.getMessage());
             throw new VoucherException("Error occurred while configuring; message:  " + e.getMessage());
         }
