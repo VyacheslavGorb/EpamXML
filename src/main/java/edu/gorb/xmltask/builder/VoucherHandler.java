@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class VoucherHandler extends DefaultHandler {
+    private static final char HYPHEN = '-';
+    private static final char UNDERSCORE = '_';
     private final Set<AbstractVoucher> vouchers;
     private AbstractVoucher currentVoucher;
     private VoucherTag currentXmlTag;
@@ -41,7 +43,7 @@ public class VoucherHandler extends DefaultHandler {
                 currentVoucher.setWebSite(attributes.getValue(websiteAttributeIndex));
             }
         } else {
-            VoucherTag temp = VoucherTag.valueOf(qName.toUpperCase().replace("-", "_"));
+            VoucherTag temp = VoucherTag.valueOf(qName.toUpperCase().replace(HYPHEN, UNDERSCORE));
             if (withText.contains(temp)) {
                 currentXmlTag = temp;
             }

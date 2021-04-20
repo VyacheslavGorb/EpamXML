@@ -1,13 +1,30 @@
 package edu.gorb.xmltask.builder;
 
+import edu.gorb.xmltask.exception.VoucherException;
+
 public class VoucherBuilderFactory {
-    public AbstractVoucherBuilder createBuilder(BuilderType type) {
-        AbstractVoucherBuilder builder = null;
+    private enum TypeParser {
+        SAX, STAX, DOM
+    }
+
+    private VoucherBuilderFactory() {
+    }
+
+    public static AbstractVoucherBuilder createBuilder(String typeParser) throws VoucherException {
+        TypeParser type = TypeParser.valueOf(typeParser.toUpperCase());
         switch (type) {
-            case SAX -> builder = new VoucherSaxBuilder();
-            case DOM -> builder = new VoucherDOMBuilder();
-            case STAX -> builder = new VoucherStaxBuilder();
+            case DOM -> {
+                return new VoucherDOMBuilder();
+            }
+            case STAX -> {
+                return new VoucherStaxBuilder();
+            }
+            case SAX -> {
+                return new VoucherSaxBuilder();
+            }
+            default -> {
+                throw new VoucherException(String.format("No such constant (%s)", typeParser));
+            }
         }
-        return builder;
     }
 }

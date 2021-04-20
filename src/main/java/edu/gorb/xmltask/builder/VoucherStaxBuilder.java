@@ -17,6 +17,8 @@ import javax.xml.stream.XMLStreamReader;
 
 public class VoucherStaxBuilder extends AbstractVoucherBuilder {
     private static final Logger logger = LogManager.getLogger();
+    private static final char HYPHEN = '-';
+    private static final char UNDERSCORE = '_';
     private final XMLInputFactory inputFactory;
 
     public VoucherStaxBuilder() {
@@ -71,7 +73,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
                 case XMLStreamConstants.START_ELEMENT:
                     name = reader.getLocalName();
                     String data = getXMLText(reader);
-                    switch (VoucherTag.valueOf(name.toUpperCase().replace('-', '_'))) {
+                    switch (VoucherTag.valueOf(name.toUpperCase().replace(HYPHEN, UNDERSCORE))) {
                         case COUNTRY -> voucher.setCountry(CountryType.valueOf(data.toUpperCase()));
                         case DEPARTURE_DATE_TIME -> voucher.setDeparture(LocalDateTime.parse(data));
                         case ARRIVAL_DATE_TIME -> voucher.setArrival(LocalDateTime.parse(data));
@@ -112,7 +114,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
                 case XMLStreamConstants.START_ELEMENT:
                     name = reader.getLocalName();
                     String data = getXMLText(reader);
-                    switch (VoucherTag.valueOf(name.toUpperCase().replace('-', '_'))) {
+                    switch (VoucherTag.valueOf(name.toUpperCase().replace(HYPHEN, UNDERSCORE))) {
                         case STARS -> hotel.setStarsCount(Integer.parseInt(data));
                         case FOOD -> hotel.setFoodType(FoodType.valueOf(data.toUpperCase()));
                         case AIR_CONDITIONING -> hotel.setAirConditioningPresent(Boolean.parseBoolean(data));
@@ -122,7 +124,7 @@ public class VoucherStaxBuilder extends AbstractVoucherBuilder {
                     break;
                 case XMLStreamConstants.END_ELEMENT:
                     name = reader.getLocalName();
-                    if (VoucherTag.valueOf(name.toUpperCase().replace('-', '_')) == VoucherTag.HOTEL) {
+                    if (VoucherTag.valueOf(name.toUpperCase().replace(HYPHEN, UNDERSCORE)) == VoucherTag.HOTEL) {
                         return;
                     }
             }

@@ -22,12 +22,14 @@ public enum VoucherTag {
     AIR_CONDITIONING,
     TV;
 
+    private static final char HYPHEN = '-';
+    private static final char UNDERSCORE = '_';
 
     @Override
     public String toString() {
         String result = this.name();
         result = result.toLowerCase(Locale.ROOT);
-        result = result.replace("_", "-");
+        result = result.replace(UNDERSCORE, HYPHEN);
         return result;
     }
 }

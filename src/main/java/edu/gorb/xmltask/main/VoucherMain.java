@@ -2,8 +2,8 @@ package edu.gorb.xmltask.main;
 
 import edu.gorb.xmltask.exception.VoucherException;
 import edu.gorb.xmltask.builder.AbstractVoucherBuilder;
-import edu.gorb.xmltask.builder.BuilderType;
 import edu.gorb.xmltask.builder.VoucherBuilderFactory;
+import edu.gorb.xmltask.validator.VoucherValidator;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,17 +13,23 @@ import java.net.URL;
 
 public class VoucherMain {
     private static final Logger logger = LogManager.getLogger();
-    private static final String RELATIVE_PATH = "files/vouchers.xml";
+    private static final String RELATIVE_FILE_PATH = "files/vouchers.xml";
+    private static final String RELATIVE_SCHEMA_PATH = "files/vouchers.xsd";
+
     public static void main(String[] args) {
-        VoucherBuilderFactory factory = new VoucherBuilderFactory();
-        AbstractVoucherBuilder saxBuilder = factory.createBuilder(BuilderType.SAX);
-        AbstractVoucherBuilder domBuilder = factory.createBuilder(BuilderType.DOM);
-        AbstractVoucherBuilder staxBuilder = factory.createBuilder(BuilderType.STAX);
         try {
-            String path = convertToAbsolutePath(RELATIVE_PATH);
-            saxBuilder.buildVouchers(path);
-            domBuilder.buildVouchers(path);
-            staxBuilder.buildVouchers(path);
+            String filePath = convertToAbsolutePath(RELATIVE_FILE_PATH);
+            String schemaPath = convertToAbsolutePath(RELATIVE_SCHEMA_PATH);
+            VoucherValidator validator = new VoucherValidator();
+            if (!validator.isValidXmlFile(filePath, schemaPath)) {
+                return;
+            }
+            AbstractVoucherBuilder saxBuilder = VoucherBuilderFactory.createBuilder("sax");
+            AbstractVoucherBuilder domBuilder = VoucherBuilderFactory.createBuilder("dom");
+            AbstractVoucherBuilder staxBuilder = VoucherBuilderFactory.createBuilder("stax");
+            saxBuilder.buildVouchers(filePath);
+            domBuilder.buildVouchers(filePath);
+            staxBuilder.buildVouchers(filePath);
             logger.log(Level.INFO, "Built successfully");
         } catch (VoucherException e) {
             logger.log(Level.FATAL, e.getMessage());

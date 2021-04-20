@@ -1,15 +1,20 @@
 package edu.gorb.xmltask.validator;
 
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import javax.xml.validation.Validator;
 import java.io.File;
 
 import static org.testng.AssertJUnit.assertFalse;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class VoucherValidatorTest {
-    private VoucherValidator validator = new VoucherValidator();
+    private VoucherValidator validator;
+
+    @BeforeClass
+    public void createValidator() {
+        validator = new VoucherValidator();
+    }
 
     @Test
     public void isValidXmlFileTestValid() {

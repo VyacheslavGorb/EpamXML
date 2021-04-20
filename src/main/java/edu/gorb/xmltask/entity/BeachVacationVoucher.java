@@ -36,8 +36,8 @@ public class BeachVacationVoucher extends AbstractVoucher {
     @Override
     public int hashCode() {
         int result = 1;
-        result += 31* result + super.hashCode();
-        result += 31* result + distanceToBeach;
+        result += 31 * result + super.hashCode();
+        result += 31 * result + distanceToBeach;
         return result;
     }
 

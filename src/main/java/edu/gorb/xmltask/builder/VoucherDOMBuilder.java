@@ -66,9 +66,9 @@ public class VoucherDOMBuilder extends AbstractVoucherBuilder {
 
         String websiteAttribute = voucherElement.getAttribute("web-site");
 
-        if(websiteAttribute.isBlank()){
+        if (websiteAttribute.isBlank()) {
             voucher.setWebSite(AbstractVoucher.DEFAULT_WEBSITE);
-        }else {
+        } else {
             voucher.setWebSite(websiteAttribute);
         }
 
